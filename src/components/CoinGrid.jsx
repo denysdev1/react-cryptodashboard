@@ -10,14 +10,14 @@ const CoinGridStyled = styled.div`
   margin-top: 40px;
 `;
 
-export const CoinGrid = () => {
+export const CoinGrid = ({ topSection }) => {
   const { coinList } = useContext(AppContext);
-  const slicedCoins = Object.keys(coinList).slice(0, 100);
+  const slicedCoins = Object.keys(coinList).slice(0, topSection ? 10 : 100);
 
   return (
     <CoinGridStyled>
       {slicedCoins.map((coinKey) => (
-        <CoinTile key={coinKey} coinKey={coinKey} />
+        <CoinTile key={coinKey} coinKey={coinKey} topSection={topSection} />
       ))} 
     </CoinGridStyled>
   );

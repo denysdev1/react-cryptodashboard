@@ -7,6 +7,7 @@ export const SettingsSelector = () => {
   return (
     <Page name='settings'>
       <WelcomeMessage />
+      <CoinGrid topSection={true} />
       <ConfirmButton />
       <CoinGrid />
     </Page>
