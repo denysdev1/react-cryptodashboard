@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import { AppContext } from './AppProvider';
+import { useContext } from 'react';
 
 const Logo = styled.div`
   font-size: 1.5em;
@@ -20,8 +22,17 @@ const ControlButtonElem = styled.div`
   text-transform: capitalize;
 `;
 
-const ControlButton = ({ name, active }) => {
-  return <ControlButtonElem active={active}>{name}</ControlButtonElem>;
+const ControlButton = ({ name }) => {
+  const { page, handleChangePage } = useContext(AppContext);
+
+  return (
+    <ControlButtonElem
+      active={page === name}
+      onClick={() => handleChangePage(name)}
+    >
+      {name}
+    </ControlButtonElem>
+  );
 };
 
 export const AppBar = () => {
@@ -29,7 +40,7 @@ export const AppBar = () => {
     <Bar>
       <Logo>CryptoDash</Logo>
       <div></div>
-      <ControlButton active name='dashboard' />
+      <ControlButton name='dashboard' />
       <ControlButton name='settings' />
     </Bar>
   );
