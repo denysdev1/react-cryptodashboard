@@ -1,7 +1,7 @@
 import { AppBar } from '../AppBar';
 import AppLayout from '../AppLayout';
 import { AppProvider } from '../AppProvider';
-import { WelcomeMessage } from '../WelcomeMessage';
+import { SettingsSelector } from '../SettingsSelector';
 import './App.css';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <AppLayout>
       <AppProvider>
         <AppBar />
-        <WelcomeMessage />
+        <SettingsSelector />
       </AppProvider>
     </AppLayout>
   );
