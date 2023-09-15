@@ -2,10 +2,12 @@
 import { createContext, useEffect, useState } from 'react';
 import cc from 'cryptocompare';
 import _ from 'lodash';
+import moment from 'moment';
 
 cc.setApiKey(import.meta.env.VITE_API_KEY);
 
 const MAX_FAVORITES = 10;
+const TIME_UNITS = 10;
 
 const initialContext = {
   page: 'dashboard',
@@ -15,6 +17,7 @@ const initialContext = {
   filteredCoins: [],
   prices: [],
   currentFavorite: null,
+  historical: [],
   handleSetCurrentFavorite: () => {},
   setFilteredCoins: () => {},
   setCoinList: () => {},
@@ -29,7 +32,7 @@ export const AppContext = createContext(initialContext);
 
 export const AppProvider = ({ children }) => {
   const cryptoDashData = JSON.parse(localStorage.getItem('cryptoDash'));
-  const [page, setPage] = useState(cryptoDashData?.page || 'settings');
+  const [page, setPage] = useState('dashboard');
   const [firstVisit, setFirstVisit] = useState(cryptoDashData ? false : true);
   const [coinList, setCoinList] = useState(null);
   const [favorites, setFavorites] = useState(cryptoDashData?.favorites || []);
@@ -38,31 +41,14 @@ export const AppProvider = ({ children }) => {
   const [currentFavorite, setCurrentFavorite] = useState(
     cryptoDashData?.currentFavorite
   );
+  const [historical, setHistorical] = useState([]);
 
   const isFavorite = (key) => _.includes(favorites, key);
 
-  useEffect(() => {
-    const fetchCoins = async () => {
-      const { Data } = await cc.coinList();
+  const fetchCoins = async () => {
+    const { Data } = await cc.coinList();
 
-      setCoinList(Data);
-    };
-
-    fetchCoins();
-    fetchPrices();
-  }, []);
-
-  const confirmFavorites = () => {
-    const currentFavorite = favorites[0];
-    setFirstVisit(false);
-    setPage('dashboard');
-    setCurrentFavorite(currentFavorite);
-    localStorage.setItem(
-      'cryptoDash',
-      JSON.stringify({ favorites, currentFavorite })
-    );
-
-    fetchPrices();
+    setCoinList(Data);
   };
 
   const fetchPrices = async () => {
@@ -82,8 +68,65 @@ export const AppProvider = ({ children }) => {
     setPrices(prices);
   };
 
+  const fetchHistorical = async () => {
+    if (firstVisit) return;
+
+    const promises = [];
+
+    for (let units = TIME_UNITS; units > 0; units--) {
+      promises.push(
+        cc.priceHistorical(
+          currentFavorite,
+          'USD',
+          moment().subtract({ months: units }).toDate()
+        )
+      );
+    }
+
+    const historicalFromServer = await Promise.all(promises);
+    const historical = [
+      {
+        name: currentFavorite,
+        data: historicalFromServer.map((ticker, index) => [
+          moment()
+            .subtract({ months: TIME_UNITS - index })
+            .valueOf(),
+          ticker.USD,
+        ]),
+      },
+    ];
+
+    setHistorical(historical);
+  };
+
+  useEffect(() => {
+    fetchCoins();
+    fetchPrices();
+  }, []);
+
+  useEffect(() => {
+    fetchHistorical();
+  }, [currentFavorite])
+  
+
+  const confirmFavorites = () => {
+    const currentFavorite = favorites[0];
+    setFirstVisit(false);
+    setPage('dashboard');
+    setCurrentFavorite(currentFavorite);
+    localStorage.setItem(
+      'cryptoDash',
+      JSON.stringify({ favorites, currentFavorite })
+    );
+
+    fetchPrices();
+    fetchHistorical();
+  };
+
   const handleSetCurrentFavorite = (sym) => {
     setCurrentFavorite(sym);
+    setHistorical(null);
+    fetchHistorical();
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
@@ -115,6 +158,7 @@ export const AppProvider = ({ children }) => {
         filteredCoins,
         prices,
         currentFavorite,
+        historical,
         handleSetCurrentFavorite,
         setFilteredCoins,
         setCoinList,

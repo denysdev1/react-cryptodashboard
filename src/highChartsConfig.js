@@ -11,9 +11,7 @@ export default function (historical) {
     },
 
     xAxis: {
-      accessibility: {
-        rangeDescription: 'Range: 2010 to 2020',
-      },
+      type: 'datetime',
     },
 
     legend: {
@@ -31,15 +29,7 @@ export default function (historical) {
       },
     },
 
-    series: [
-      {
-        name: 'Installation',
-        data: [
-          43934, 48656, 65165, 81827, 112143, 142383, 171533, 165174, 155157,
-          161454, 154610,
-        ],
-      },
-    ],
+    series: historical,
 
     responsive: {
       rules: [

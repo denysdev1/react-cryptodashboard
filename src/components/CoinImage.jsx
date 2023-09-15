@@ -15,8 +15,8 @@ export const CoinImage = ({ coin, spotlight }) => {
   return (
     <StyledCoinImage
       spotlight={spotlight}
-      src={`http://cryptocompare.com/${coin.ImageUrl}`}
-      alt={coin.CoinSymbol}
+      src={`http://cryptocompare.com/${coin?.ImageUrl}`}
+      alt={coin?.CoinSymbol}
     />
   );
 };
