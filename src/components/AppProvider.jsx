@@ -14,6 +14,7 @@ const initialContext = {
   firstVisit: false,
   coinList: [],
   favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
+  timeInterval: 'months',
   filteredCoins: [],
   prices: [],
   currentFavorite: null,
@@ -32,8 +33,8 @@ export const AppContext = createContext(initialContext);
 
 export const AppProvider = ({ children }) => {
   const cryptoDashData = JSON.parse(localStorage.getItem('cryptoDash'));
-  const [page, setPage] = useState('dashboard');
   const [firstVisit, setFirstVisit] = useState(cryptoDashData ? false : true);
+  const [page, setPage] = useState(firstVisit ? 'settings' : 'dashboard');
   const [coinList, setCoinList] = useState(null);
   const [favorites, setFavorites] = useState(cryptoDashData?.favorites || []);
   const [filteredCoins, setFilteredCoins] = useState([]);
@@ -42,6 +43,7 @@ export const AppProvider = ({ children }) => {
     cryptoDashData?.currentFavorite
   );
   const [historical, setHistorical] = useState([]);
+  const [timeInterval, setTimeInterval] = useState('months');
 
   const isFavorite = (key) => _.includes(favorites, key);
 
@@ -78,7 +80,9 @@ export const AppProvider = ({ children }) => {
         cc.priceHistorical(
           currentFavorite,
           'USD',
-          moment().subtract({ months: units }).toDate()
+          moment()
+            .subtract({ [timeInterval]: units })
+            .toDate()
         )
       );
     }
@@ -89,7 +93,7 @@ export const AppProvider = ({ children }) => {
         name: currentFavorite,
         data: historicalFromServer.map((ticker, index) => [
           moment()
-            .subtract({ months: TIME_UNITS - index })
+            .subtract({ [timeInterval]: TIME_UNITS - index })
             .valueOf(),
           ticker.USD,
         ]),
@@ -106,13 +110,16 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchHistorical();
-  }, [currentFavorite])
-  
+  }, [currentFavorite, timeInterval]);
 
   const confirmFavorites = () => {
     const currentFavorite = favorites[0];
     setFirstVisit(false);
-    setPage('dashboard');
+
+    if (currentFavorite) {
+      setPage('dashboard');
+    }
+
     setCurrentFavorite(currentFavorite);
     localStorage.setItem(
       'cryptoDash',
@@ -146,6 +153,10 @@ export const AppProvider = ({ children }) => {
     setFavorites((prevFavorites) => _.without(prevFavorites, key));
   };
 
+  const changeChartSelect = (value) => {
+    setTimeInterval(value);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -155,6 +166,7 @@ export const AppProvider = ({ children }) => {
         firstVisit,
         coinList,
         favorites,
+        timeInterval,
         filteredCoins,
         prices,
         currentFavorite,
@@ -167,6 +179,7 @@ export const AppProvider = ({ children }) => {
         confirmFavorites,
         addCoin,
         removeCoin,
+        changeChartSelect,
       }}
     >
       {children}

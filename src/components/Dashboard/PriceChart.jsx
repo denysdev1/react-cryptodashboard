@@ -5,14 +5,20 @@ import HighchartsReact from 'highcharts-react-official';
 import HighchartsTheme from '../../highchartsTheme';
 import { useContext } from 'react';
 import { AppContext } from '../AppProvider';
+import { ChartSelect } from './ChartSelect';
 
 Highcharts.theme = HighchartsTheme;
 
 export const PriceChart = () => {
-  const { historical } = useContext(AppContext);
+  const { historical, changeChartSelect } = useContext(AppContext);
 
   return (
     <Tile>
+      <ChartSelect defaultValue='months' onChange={e => changeChartSelect(e.target.value)}>
+        <option value='days'>Days</option>
+        <option value='weeks'>Weeks</option>
+        <option value='months'>Months</option>
+      </ChartSelect>
       {historical?.length ? (
         <HighchartsReact
           options={highChartsConfig(historical)}
