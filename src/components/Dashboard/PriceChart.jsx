@@ -13,7 +13,7 @@ export const PriceChart = () => {
   const { historical, changeChartSelect } = useContext(AppContext);
 
   return (
-    <Tile>
+    <Tile display='block'>
       <ChartSelect defaultValue='months' onChange={e => changeChartSelect(e.target.value)}>
         <option value='days'>Days</option>
         <option value='weeks'>Weeks</option>

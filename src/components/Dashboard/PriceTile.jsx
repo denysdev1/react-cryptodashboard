@@ -37,6 +37,7 @@ const StyledPriceTile = styled(SelectableTile)`
       justify-items: right;
     `}
 
+  overflow-wrap: break-word;
   ${(props) =>
     props.currentFavorite &&
     css`
@@ -60,7 +61,7 @@ const PriceTileCompact = ({
     >
       <JustifyLeft>{coinName}</JustifyLeft>
       <ChangePercent red={CHANGEPCT24HOUR < 0}>
-        {CHANGEPCT24HOUR.toFixed(5)}
+        {+CHANGEPCT24HOUR.toFixed(5)}
       </ChangePercent>
       <div>${PRICE.toFixed(5)}</div>
     </StyledPriceTile>

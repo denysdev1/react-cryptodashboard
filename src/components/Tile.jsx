@@ -7,6 +7,9 @@ import {
 } from '../styles';
 
 export const Tile = styled.div`
+  display: ${props => props.display ? props.display : 'flex'};
+  flex-direction: column;
+  min-height: 120px;
   ${subtleBoxShadow};
   ${lightBlueBackground};
   padding: 10px;

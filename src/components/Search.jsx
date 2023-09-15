@@ -7,7 +7,11 @@ import fuzzy from 'fuzzy';
 
 const SearchGrid = styled.div`
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 250px minmax(1fr);
+  
+  @media (min-width: 560px) {
+    grid-template-columns: 250px 1fr;
+  }
 `;
 
 const SearchInput = styled.input`

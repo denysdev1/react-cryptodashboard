@@ -8,8 +8,26 @@ const Logo = styled.div`
 `;
 
 const Bar = styled.div`
-  display: grid;
-  grid-template-columns: 180px auto 100px 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-template-columns: 180px auto 200px;
+
+  @media (min-width: 540px) {
+    display: grid;
+  }
+`;
+
+const ButtonsContainer = styled.div`
+  margin-top: 16px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  @media (min-width: 540px) {
+    flex-direction: row;
+  }
 `;
 
 const ControlButtonElem = styled.div`
@@ -46,8 +64,10 @@ export const AppBar = () => {
     <Bar>
       <Logo>CryptoDash</Logo>
       <div></div>
+      <ButtonsContainer>
       <ControlButton name='dashboard' />
       <ControlButton name='settings' />
+      </ButtonsContainer>
     </Bar>
   );
 };
