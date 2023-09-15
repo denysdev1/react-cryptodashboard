@@ -27,7 +27,7 @@ export const AppContext = createContext(initialContext);
 export const AppProvider = ({ children }) => {
   const cryptoDashData = JSON.parse(localStorage.getItem('cryptoDash'));
   const [page, setPage] = useState(cryptoDashData?.page || 'settings');
-  const [firstVisit, setFirstVisit] = useState(true);
+  const [firstVisit, setFirstVisit] = useState(cryptoDashData ? false : true);
   const [coinList, setCoinList] = useState(null);
   const [favorites, setFavorites] = useState(cryptoDashData?.favorites || []);
   const [filteredCoins, setFilteredCoins] = useState([]);
@@ -68,7 +68,7 @@ export const AppProvider = ({ children }) => {
       }
     }
 
-    console.log(prices);
+    
 
     setPrices(prices);
   };
