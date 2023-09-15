@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { SelectableTile } from '../Tile';
 import { useContext } from 'react';
 import { AppContext } from '../AppProvider';
-import { fontSize3, fontSizeBig } from '../../styles';
+import { fontSize3, fontSizeBig, greenBoxShadow } from '../../styles';
 import { CoinHeaderGridStyled } from '../CoinHeaderGrid';
 
 const JustifyRight = styled.div`
@@ -36,11 +36,28 @@ const StyledPriceTile = styled(SelectableTile)`
       grid-template-columns: repeat(3, 1fr);
       justify-items: right;
     `}
+
+  ${(props) =>
+    props.currentFavorite &&
+    css`
+      ${greenBoxShadow};
+      pointer-events: none;
+    `}
 `;
 
-const PriceTileCompact = ({ coinName, PRICE, CHANGEPCT24HOUR }) => {
+const PriceTileCompact = ({
+  coinName,
+  PRICE,
+  CHANGEPCT24HOUR,
+  currentFavorite,
+  setCurrentFavorite,
+}) => {
   return (
-    <StyledPriceTile compact>
+    <StyledPriceTile
+      onClick={setCurrentFavorite}
+      compact
+      currentFavorite={currentFavorite}
+    >
       <JustifyLeft>{coinName}</JustifyLeft>
       <ChangePercent red={CHANGEPCT24HOUR < 0}>
         {CHANGEPCT24HOUR.toFixed(5)}
@@ -51,7 +68,8 @@ const PriceTileCompact = ({ coinName, PRICE, CHANGEPCT24HOUR }) => {
 };
 
 export const PriceTile = ({ price, index }) => {
-  const { coinList } = useContext(AppContext);
+  const { coinList, currentFavorite, handleSetCurrentFavorite } =
+    useContext(AppContext);
   const sym = Object.keys(price)[index];
   const coinName = coinList[sym]?.CoinName;
   const CHANGEPCT24HOUR = price[sym]?.USD.CHANGEPCT24HOUR;
@@ -65,12 +83,17 @@ export const PriceTile = ({ price, index }) => {
         coinName={coinName}
         PRICE={PRICE}
         CHANGEPCT24HOUR={CHANGEPCT24HOUR}
+        currentFavorite={currentFavorite === sym}
+        setCurrentFavorite={() => handleSetCurrentFavorite(sym)}
       />
     );
   }
 
   return (
-    <StyledPriceTile>
+    <StyledPriceTile
+      onClick={() => handleSetCurrentFavorite(sym)}
+      currentFavorite={currentFavorite === sym}
+    >
       <CoinHeaderGridStyled>
         <div>{coinName}</div>
         <JustifyRight>

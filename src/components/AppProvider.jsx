@@ -13,6 +13,8 @@ const initialContext = {
   favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
   filteredCoins: [],
   prices: [],
+  currentFavorite: null,
+  handleSetCurrentFavorite: () => {},
   setFilteredCoins: () => {},
   setCoinList: () => {},
   handleChangePage: () => {},
@@ -32,6 +34,9 @@ export const AppProvider = ({ children }) => {
   const [favorites, setFavorites] = useState(cryptoDashData?.favorites || []);
   const [filteredCoins, setFilteredCoins] = useState([]);
   const [prices, setPrices] = useState([]);
+  const [currentFavorite, setCurrentFavorite] = useState(
+    cryptoDashData?.currentFavorite
+  );
 
   const isFavorite = (key) => _.includes(favorites, key);
 
@@ -47,9 +52,14 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   const confirmFavorites = () => {
+    const currentFavorite = favorites[0];
     setFirstVisit(false);
     setPage('dashboard');
-    localStorage.setItem('cryptoDash', JSON.stringify({ favorites }));
+    setCurrentFavorite(currentFavorite);
+    localStorage.setItem(
+      'cryptoDash',
+      JSON.stringify({ favorites, currentFavorite })
+    );
 
     fetchPrices();
   };
@@ -68,9 +78,18 @@ export const AppProvider = ({ children }) => {
       }
     }
 
-    
-
     setPrices(prices);
+  };
+
+  const handleSetCurrentFavorite = (sym) => {
+    setCurrentFavorite(sym);
+    localStorage.setItem(
+      'cryptoDash',
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem('cryptoDash')),
+        currentFavorite: sym,
+      })
+    );
   };
 
   const addCoin = (key) => {
@@ -94,6 +113,8 @@ export const AppProvider = ({ children }) => {
         favorites,
         filteredCoins,
         prices,
+        currentFavorite,
+        handleSetCurrentFavorite,
         setFilteredCoins,
         setCoinList,
         isFavorite,
