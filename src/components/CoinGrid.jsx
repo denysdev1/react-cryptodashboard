@@ -11,14 +11,16 @@ const CoinGridStyled = styled.div`
 `;
 
 export const CoinGrid = ({ topSection }) => {
-  const { coinList } = useContext(AppContext);
-  const slicedCoins = Object.keys(coinList).slice(0, topSection ? 10 : 100);
+  const { coinList, favorites } = useContext(AppContext);
+  const coins = topSection
+    ? favorites
+    : Object.keys(coinList).slice(0, topSection ? 10 : 100);
 
   return (
     <CoinGridStyled>
-      {slicedCoins.map((coinKey) => (
+      {coins.map((coinKey) => (
         <CoinTile key={coinKey} coinKey={coinKey} topSection={topSection} />
-      ))} 
+      ))}
     </CoinGridStyled>
   );
 };
