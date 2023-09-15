@@ -1,25 +1,14 @@
-import highChartsConfig from '../../highChartsConfig';
+import highChartsConfig from '../../highchartsConfig';
 import { Tile } from '../Tile';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import HighchartsTheme from '../../highchartsTheme';
 
 export const PriceChart = () => {
   return (
     <Tile>
       <HighchartsReact
-        options={{
-          chart: {
-            type: 'spline',
-          },
-          title: {
-            text: 'My chart',
-          },
-          series: [
-            {
-              data: [1, 2, 1, 4, 3, 6],
-            },
-          ],
-        }}
+        options={highChartsConfig()}
         highcharts={Highcharts}
         constructorType='chart'
       />

@@ -9,7 +9,13 @@ export default function (historical) {
         text: 'Price',
       },
     },
-    xAxis: { type: 'datetime' },
+
+    xAxis: {
+      accessibility: {
+        rangeDescription: 'Range: 2010 to 2020',
+      },
+    },
+
     legend: {
       layout: 'vertical',
       align: 'right',
@@ -25,7 +31,15 @@ export default function (historical) {
       },
     },
 
-    series: historical,
+    series: [
+      {
+        name: 'Installation',
+        data: [
+          43934, 48656, 65165, 81827, 112143, 142383, 171533, 165174, 155157,
+          161454, 154610,
+        ],
+      },
+    ],
 
     responsive: {
       rules: [
