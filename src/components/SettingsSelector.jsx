@@ -2,6 +2,7 @@ import { ConfirmButton } from './ConfirmButton';
 import { WelcomeMessage } from './WelcomeMessage';
 import Page from './Page';
 import { CoinGrid } from './CoinGrid';
+import { Search } from './Search';
 
 export const SettingsSelector = () => {
   return (
@@ -9,6 +10,7 @@ export const SettingsSelector = () => {
       <WelcomeMessage />
       <CoinGrid topSection={true} />
       <ConfirmButton />
+      <Search />
       <CoinGrid />
     </Page>
   );
