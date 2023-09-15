@@ -8,14 +8,18 @@ const MAX_FAVORITES = 10;
 
 const initialContext = {
   page: 'dashboard',
-  favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
   firstVisit: false,
+  coinList: [],
+  favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
+  filteredCoins: [],
+  prices: [],
+  setFilteredCoins: () => {},
+  setCoinList: () => {},
   handleChangePage: () => {},
   confirmFavorites: () => {},
   isFavorite: () => {},
   addCoin: () => {},
   removeCoin: () => {},
-  coinList: [],
 };
 
 export const AppContext = createContext(initialContext);
@@ -26,6 +30,8 @@ export const AppProvider = ({ children }) => {
   const [firstVisit, setFirstVisit] = useState(true);
   const [coinList, setCoinList] = useState(null);
   const [favorites, setFavorites] = useState(cryptoDashData?.favorites || []);
+  const [filteredCoins, setFilteredCoins] = useState([]);
+  const [prices, setPrices] = useState([]);
 
   const isFavorite = (key) => _.includes(favorites, key);
 
@@ -37,12 +43,34 @@ export const AppProvider = ({ children }) => {
     };
 
     fetchCoins();
+    fetchPrices();
   }, []);
 
   const confirmFavorites = () => {
     setFirstVisit(false);
     setPage('dashboard');
     localStorage.setItem('cryptoDash', JSON.stringify({ favorites }));
+
+    fetchPrices();
+  };
+
+  const fetchPrices = async () => {
+    if (firstVisit) return;
+
+    const prices = [];
+
+    for (let i = 0; i < favorites.length; i++) {
+      try {
+        const priceData = await cc.priceFull(favorites, 'USD');
+        prices.push(priceData);
+      } catch {
+        console.log('Error occured while fetching a price!');
+      }
+    }
+
+    console.log(prices);
+
+    setPrices(prices);
   };
 
   const addCoin = (key) => {
@@ -55,7 +83,6 @@ export const AppProvider = ({ children }) => {
     setFavorites((prevFavorites) => _.without(prevFavorites, key));
   };
 
-
   return (
     <AppContext.Provider
       value={{
@@ -65,6 +92,10 @@ export const AppProvider = ({ children }) => {
         firstVisit,
         coinList,
         favorites,
+        filteredCoins,
+        prices,
+        setFilteredCoins,
+        setCoinList,
         isFavorite,
         handleChangePage: setPage,
         confirmFavorites,

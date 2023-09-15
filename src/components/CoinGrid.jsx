@@ -10,11 +10,18 @@ const CoinGridStyled = styled.div`
   margin-top: 40px;
 `;
 
+const getLowerSectionCoins = (coinList, filteredCoins) => {
+  return (
+    (filteredCoins.length && filteredCoins.slice(0, 100)) ||
+    Object.keys(coinList).slice(0, 100)
+  );
+};
+
 export const CoinGrid = ({ topSection }) => {
-  const { coinList, favorites } = useContext(AppContext);
+  const { coinList, favorites, filteredCoins } = useContext(AppContext);
   const coins = topSection
     ? favorites
-    : Object.keys(coinList).slice(0, topSection ? 10 : 100);
+    : getLowerSectionCoins(coinList, filteredCoins);
 
   return (
     <CoinGridStyled>
