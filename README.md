@@ -1,8 +1,41 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# CryptoDash
 
-Currently, two official plugins are available:
+Welcome to CryptoDash, the app for visualizing the price changes of various cryptocurrencies!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[DEMO-LINK](https://react-cryptodashboard.vercel.app/)
+## Features
+
+- Cryptocurrency Selection
+- User-Friendly and Responsive Interface
+- Customizable Watchlists
+
+
+## Tech Stack
+
+React, Styled-Components, Highcharts, Moment, Lodash, Fuzzy
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:denysdev1/react-cryptodashboard.git
+```
+
+Go to the project directory
+
+```bash
+  cd react-cryptodashboard
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```

@@ -47,12 +47,17 @@ const ControlButtonElem = styled.div`
 
 const ControlButton = ({ name }) => {
   const { page, handleChangePage, firstVisit } = useContext(AppContext);
+  const favoritesFromStorage = JSON.parse(
+    localStorage.getItem('cryptoDash')
+  )?.favorites;
 
   return (
     <ControlButtonElem
       active={page === name}
       onClick={() => handleChangePage(name)}
-      hidden={firstVisit && name === 'dashboard'}
+      hidden={
+        (firstVisit || !favoritesFromStorage?.length) && name === 'dashboard'
+      }
     >
       {name}
     </ControlButtonElem>
@@ -65,8 +70,8 @@ export const AppBar = () => {
       <Logo>CryptoDash</Logo>
       <div></div>
       <ButtonsContainer>
-      <ControlButton name='dashboard' />
-      <ControlButton name='settings' />
+        <ControlButton name='dashboard' />
+        <ControlButton name='settings' />
       </ButtonsContainer>
     </Bar>
   );
