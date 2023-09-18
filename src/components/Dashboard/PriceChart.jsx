@@ -1,8 +1,8 @@
-import highChartsConfig from '../../highchartsConfig';
+import highChartsConfig from './highchartsConfig';
 import { Tile } from '../Tile';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import HighchartsTheme from '../../highchartsTheme';
+import HighchartsTheme from './highchartsTheme';
 import { useContext } from 'react';
 import { AppContext } from '../AppProvider';
 import { ChartSelect } from './ChartSelect';
@@ -14,7 +14,10 @@ export const PriceChart = () => {
 
   return (
     <Tile display='block'>
-      <ChartSelect defaultValue='months' onChange={e => changeChartSelect(e.target.value)}>
+      <ChartSelect
+        defaultValue='months'
+        onChange={(e) => changeChartSelect(e.target.value)}
+      >
         <option value='days'>Days</option>
         <option value='weeks'>Weeks</option>
         <option value='months'>Months</option>
